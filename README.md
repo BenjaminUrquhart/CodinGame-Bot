@@ -13,6 +13,12 @@ Download jarfile and view run instructions via the releases page.
 
 You can test the bot [here](https://discord.gg/Xa94RwU)
 
+Known bugs:
+- user lookup by handle is broken
+- achievement priority is broken for users who have gained a large number of Legend ("PLATINUM") achievements
+- the bio can probably go over the char limit for embeds
+- literally everything
+
 Dependencies:
 - JDA 3: https://github.com/DV8FromTheWorld/JDA
 - OkHttp 3: https://github.com/square/okhttp
