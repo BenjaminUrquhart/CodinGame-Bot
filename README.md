@@ -1,5 +1,9 @@
 # CodinGame-Bot
-Discord HackWeek: bot for CodinGame
+Discord HackWeek: bot for [CodinGame](https://www.codingame.com/)
+
+CodinGame does not have an official API, nor is their unofficial API documented, so a LOT of time was spent reverse-engineering it.
+
+**The developers are OK with this as long as requests are not spammed**
 
 One command: profile
 The prefix is a mention
