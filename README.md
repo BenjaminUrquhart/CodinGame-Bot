@@ -6,9 +6,10 @@ CodinGame does not have an official API, nor is their unofficial API documented,
 **The developers are OK with this as long as requests are not spammed**
 
 One command: profile
+
 The prefix is a mention
 
-Download jarfile via the releases page.
+Download jarfile and view run instructions via the releases page.
 
 Dependencies:
 - JDA 3: https://github.com/DV8FromTheWorld/JDA
