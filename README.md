@@ -11,6 +11,8 @@ The prefix is a mention
 
 Download jarfile and view run instructions via the releases page.
 
+You can test the bot [here](https://discord.gg/Xa94RwU)
+
 Dependencies:
 - JDA 3: https://github.com/DV8FromTheWorld/JDA
 - OkHttp 3: https://github.com/square/okhttp
