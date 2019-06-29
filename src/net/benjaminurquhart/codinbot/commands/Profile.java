@@ -55,6 +55,9 @@ public class Profile extends Command<CodinBot> {
 						}
 						if(user == null) user = users.get(0);
 					}
+					else {
+						user = users.get(0);
+					}
 				}
 				catch(Exception e) {
 					try {
