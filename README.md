@@ -1,2 +1,4 @@
 # CodinGame-Bot
-Discord hackWeek: bot for CodinGame
+Discord HackWeek: bot for CodinGame
+
+One command: profile.
