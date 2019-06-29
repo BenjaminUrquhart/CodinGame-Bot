@@ -6,4 +6,4 @@ The prefix is a mention
 
 Download jarfile via the releases page.
 
-![aaa][https://chat.is-going-to-rickroll.me/i/MSGRtVrwVcfZVQ.png]
+![aaa](https://chat.is-going-to-rickroll.me/i/MSGRtVrwVcfZVQ.png)
