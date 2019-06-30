@@ -17,6 +17,7 @@ Known bugs:
 - user lookup by handle is broken
 - achievement priority is broken for users who have gained a large number of Legend ("PLATINUM") achievements
 - the bio can probably go over the char limit for embeds
+- misspelled "matching" as "mathcing"
 - literally everything
 
 Dependencies:
