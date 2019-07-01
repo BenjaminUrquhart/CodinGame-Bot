@@ -1,4 +1,7 @@
 # CodinGame-Bot
+
+**NOTICE: I forgot to build the NPE fix and publish it. Since I don’t have access to my computer, the previous version is currently running. Only usernames that can be matched exactly will work**
+
 Discord HackWeek: bot for [CodinGame](https://www.codingame.com/)
 
 CodinGame does not have an official API, nor is their unofficial API documented, so a LOT of time was spent reverse-engineering it.
