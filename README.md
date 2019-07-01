@@ -1,6 +1,6 @@
 # CodinGame-Bot
 
-**NOTICE: I forgot to build the NPE fix and publish it. Since I don’t have access to my computer, the previous version is currently running. Only usernames that can be matched exactly will work**
+**NOTICE: I forgot to build the NPE fix and publish it. Since I don’t have access to my computer, the previous version is currently running. Only usernames that cannot be matched exactly will work**
 
 Discord HackWeek: bot for [CodinGame](https://www.codingame.com/)
 
