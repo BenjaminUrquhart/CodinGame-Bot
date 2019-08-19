@@ -7,7 +7,7 @@ CodinGame does not have an official API, nor is their unofficial API documented,
 **The developers are OK with this as long as requests are not spammed**
 
 Commands:
-profile
+profile,
 puzzle
 
 The prefix is a mention
