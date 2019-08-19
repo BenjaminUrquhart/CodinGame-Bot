@@ -10,6 +10,8 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import net.benjaminurquhart.codinbot.api.entities.CodinGamer;
+import net.benjaminurquhart.codinbot.api.entities.Puzzle;
+import net.benjaminurquhart.codinbot.api.enums.Route;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -45,8 +47,24 @@ public class CodinGameAPI {
 			throw new APIException(e);
 		}
 	}
+	public static List<Puzzle> getPuzzlesByName(String name) {
+		try {
+			JSONArray response = getJSONArray(Route.SEARCH, new JSONArray().put(name).put("en"));
+			return response.toList().stream()
+									.map(Map.class::cast)
+									.filter(json -> json.get("type").equals("PUZZLE"))
+									.map(json -> new Puzzle(new JSONObject(json)))
+									.collect(Collectors.toList());
+		}
+		catch(Exception e) {
+			throw new APIException(e);
+		}
+	}
 	public static JSONArray getJSONArray(Route route, JSONArray data) throws IOException {
-		return new JSONArray(makeRequest(route, data.toString()).body().string());
+		Response response = makeRequest(route, data.toString());
+		String str = response.body().string();
+		//System.err.println(str);
+		return new JSONArray(str);
 	}
 	public static JSONObject getJSONObject(Route route, JSONArray data) throws IOException {
 		Response response = makeRequest(route, data.toString());
@@ -56,6 +74,8 @@ public class CodinGameAPI {
 	}
 	
 	private static Response makeRequest(Route route, String data) throws IOException {
+		//System.err.println(route.getMethod()+" "+route);
+		//System.err.println(data);
 		Request request = new Request.Builder()
 				.url(route.toString())
 				.addHeader("Content-Type", "application/json")

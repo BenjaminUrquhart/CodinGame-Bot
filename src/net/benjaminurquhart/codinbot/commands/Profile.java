@@ -11,9 +11,9 @@ import org.json.JSONObject;
 
 import net.benjaminurquhart.codinbot.CodinBot;
 import net.benjaminurquhart.codinbot.api.CodinGameAPI;
-import net.benjaminurquhart.codinbot.api.Route;
 import net.benjaminurquhart.codinbot.api.entities.CodinGamer;
 import net.benjaminurquhart.codinbot.api.entities.UserProfile;
+import net.benjaminurquhart.codinbot.api.enums.Route;
 import net.benjaminurquhart.jch.Command;
 import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.entities.TextChannel;
@@ -27,7 +27,7 @@ public class Profile extends Command<CodinBot> {
 	@Override
 	public void handle(GuildMessageReceivedEvent event, CodinBot self) {
 		TextChannel channel = event.getChannel();
-		String[] args = event.getMessage().getContentRaw().split(" ", 5);
+		String[] args = event.getMessage().getContentRaw().split(" ", 3);
 		if(args.length < 3){
 			channel.sendMessage(this.getHelpMenu()).queue();
 			return;
@@ -166,13 +166,13 @@ public class Profile extends Command<CodinBot> {
 				}
 				eb.addField("Best language achievements", 
 						    lang.stream()
-						    .map(j->j.getString("level")+": **"+j.getString("title")+"**:\n"+j.getString("description"))
-						        .collect(Collectors.joining("\n"))
+						    	.map(j->j.getString("level")+": **"+j.getString("title")+"**:\n"+j.getString("description"))
+						    	.collect(Collectors.joining("\n"))
 						    ,false);
 				eb.addField("Best puzzle achievements", 
 					    puzzle.stream()
-					    .map(j->j.getString("level")+": **"+j.getString("title")+"**:\n"+j.getString("description"))
-					        .collect(Collectors.joining("\n"))
+					    	  .map(j->j.getString("level")+": **"+j.getString("title")+"**:\n"+j.getString("description"))
+					    	  .collect(Collectors.joining("\n"))
 					    ,false);
 				(users!=null&&users.size()>1?channel.sendMessage("Warning: "+users.size()+" users share a similar username. Showing the one with mathcing capitalization/first in the list").embed(eb.build()):channel.sendMessage(eb.build())).queue();
 			}

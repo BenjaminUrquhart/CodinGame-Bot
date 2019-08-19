@@ -3,7 +3,7 @@ package net.benjaminurquhart.codinbot.api.entities;
 import org.json.JSONArray;
 
 import net.benjaminurquhart.codinbot.api.CodinGameAPI;
-import net.benjaminurquhart.codinbot.api.Route;
+import net.benjaminurquhart.codinbot.api.enums.Route;
 
 public class CodinGamer {
 
@@ -17,7 +17,7 @@ public class CodinGamer {
 		this.name = name;
 		
 		try {
-			profile = new UserProfile(CodinGameAPI.getJSONObject(Route.GET_STATS, new JSONArray().put(handle)));
+			profile = new UserProfile(CodinGameAPI.getJSONObject(Route.GET_POINTS_BY_HANDLE, new JSONArray().put(handle)));
 		}
 		catch(Exception e) {
 			e.printStackTrace();
