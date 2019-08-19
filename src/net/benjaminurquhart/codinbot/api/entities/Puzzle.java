@@ -159,6 +159,7 @@ public class Puzzle {
 		catch (IOException | JSONException e) {
 			throw new APIException(e);
 		}
+		expanded = true;
 	}
 	public String toString() {
 		return String.format("%s (Type: %s, Difficulty: %s)", name, type, difficulty == null ? "N/A" : difficulty);
