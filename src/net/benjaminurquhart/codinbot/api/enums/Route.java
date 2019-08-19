@@ -14,6 +14,9 @@ public enum Route {
 	GET_POINTS_BY_HANDLE("CodinGamer/findCodingamePointsStatsByHandle"),
 	GET_CLASH_RANKING("Leaderboards/getCodinGamerClashRanking"),
 	
+	GET_NEXT_CONTEST_ID("Challenge/findNextVisibleChallenge"),
+	GET_CONTEST_BY_ID("Challenge/findWorldCupByPublicId"),
+	
 	SEARCH("search/search");
 	
 	private final String path,method;

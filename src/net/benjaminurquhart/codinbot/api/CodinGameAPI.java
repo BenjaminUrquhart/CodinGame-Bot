@@ -10,6 +10,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import net.benjaminurquhart.codinbot.api.entities.CodinGamer;
+import net.benjaminurquhart.codinbot.api.entities.Contest;
 import net.benjaminurquhart.codinbot.api.entities.Puzzle;
 import net.benjaminurquhart.codinbot.api.enums.Route;
 import okhttp3.MediaType;
@@ -55,6 +56,21 @@ public class CodinGameAPI {
 									.filter(json -> json.get("type").equals("PUZZLE"))
 									.map(json -> new Puzzle(new JSONObject(json)))
 									.collect(Collectors.toList());
+		}
+		catch(Exception e) {
+			throw new APIException(e);
+		}
+	}
+	public static Contest getNextContest() {
+		try {
+			JSONObject basic = getJSONObject(Route.GET_NEXT_CONTEST_ID, new JSONArray());
+			JSONObject full = getJSONObject(Route.GET_CONTEST_BY_ID, new JSONArray().put(basic.getString("publicId")).put(JSONObject.NULL));
+			full = full.getJSONObject("challenge");
+			full.put("imageBinaryId", full.optLong("cover1Id", basic.optLong("coverId", -1)));
+			full.put("id", basic.getString("publicId"));
+			full.put("name", full.getString("title"));
+			full.put("level", full.getString("type"));
+			return new Contest(full);
 		}
 		catch(Exception e) {
 			throw new APIException(e);

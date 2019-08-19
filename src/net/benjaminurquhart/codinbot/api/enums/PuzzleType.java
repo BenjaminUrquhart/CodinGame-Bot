@@ -3,6 +3,7 @@ package net.benjaminurquhart.codinbot.api.enums;
 public enum PuzzleType {
 
 	SOLO,
+	CONTEST,
 	MULTIPLAYER,
 	OPTIMIZATION;
 	
@@ -11,6 +12,6 @@ public enum PuzzleType {
 		case "multi":return MULTIPLAYER;
 		case "optim":return OPTIMIZATION;
 		}
-		return SOLO;
+		return s == null ? CONTEST : SOLO;
 	}
 }

@@ -3,6 +3,8 @@ package net.benjaminurquhart.codinbot.api.enums;
 public enum Difficulty {
 
 	TUTORIAL("Tutorial"),
+	CODEGOLF("Code Golf"),
+	WORLDCUP("Contest"),
 	EASY("Easy"),
 	MEDIUM("Medium"),
 	HARD("Hard"),

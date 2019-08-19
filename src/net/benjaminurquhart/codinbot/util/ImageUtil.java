@@ -5,6 +5,7 @@ import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.awt.image.Raster;
+import java.util.Arrays;
 
 public class ImageUtil {
 	
@@ -17,8 +18,9 @@ public class ImageUtil {
 			Graphics2D graphics = scaled.createGraphics();
 			graphics.drawImage(img, 0, 0, null);
 			graphics.dispose();
-			int[] data = new int[3];
+			int[] data = new int[4];
 			data = scaled.getRaster().getPixel(0, 0, data);
+			System.out.println(Arrays.toString(data));
 			return new Color(data[0],data[1],data[2]);
 		}
 		Color out = null;

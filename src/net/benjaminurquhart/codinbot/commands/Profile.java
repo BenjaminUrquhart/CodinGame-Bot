@@ -1,19 +1,20 @@
 package net.benjaminurquhart.codinbot.commands;
 
-import java.util.ArrayList;
-import java.util.HashSet;
+import java.awt.Color;
+//import java.util.ArrayList;
+//import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
+//import java.util.Set;
+//import java.util.stream.Collectors;
 
-import org.json.JSONArray;
+//import org.json.JSONArray;
 import org.json.JSONObject;
 
 import net.benjaminurquhart.codinbot.CodinBot;
 import net.benjaminurquhart.codinbot.api.CodinGameAPI;
 import net.benjaminurquhart.codinbot.api.entities.CodinGamer;
 import net.benjaminurquhart.codinbot.api.entities.UserProfile;
-import net.benjaminurquhart.codinbot.api.enums.Route;
+//import net.benjaminurquhart.codinbot.api.enums.Route;
 import net.benjaminurquhart.jch.Command;
 import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.entities.TextChannel;
@@ -65,7 +66,7 @@ public class Profile extends Command<CodinBot> {
 					}
 					catch(Exception exec) {
 						exec.printStackTrace();
-						channel.sendMessage("Unknown username/handle:\n\n```"+e+"```\n\n```"+exec+"```").queue();
+						channel.sendMessage("Unknown username/handle").queue();
 						return;
 					}
 				}
@@ -98,14 +99,29 @@ public class Profile extends Command<CodinBot> {
 				//System.err.println(user.getImageUrl());
 				
 				JSONObject gamer = json.getJSONObject("codingamer");
+				int level = gamer.getInt("level");
+				eb.setColor(Color.GREEN);
+				if(level > 9) {
+					eb.setColor(Integer.parseInt("995734",16));
+				}
+				if(level > 19) {
+					eb.setColor(Integer.parseInt("969493",16));
+				}
+				if(level > 29) {
+					eb.setColor(Integer.parseInt("d4a200",16));
+				}
+				if(level > 39) {
+					eb.setColor(Color.RED);
+				}
 				eb.setThumbnail(user.getImageUrl());
 				eb.setAuthor(args[2],"https://www.codingame.com/profile/"+user.getHandle());
 				eb.setDescription(gamer.has("tagline")?gamer.getString("tagline"):"*this user has not set a tagline*");
-				eb.addField("Level",gamer.get("level").toString(), true);
+				eb.addField("Level", String.valueOf(level), true);
 				eb.addField("Rank", rank+" ("+title+")", true);
-				eb.addField("Bio",gamer.has("biography")?gamer.getString("biography"):"*this user has not created a biography*", true);
 				eb.addField("Country", gamer.getString("countryId"), true);
+				eb.addField("Bio",gamer.has("biography")?gamer.getString("biography"):"*this user has not created a biography*", false);
 				
+				/*
 				JSONArray achievements = CodinGameAPI.getJSONArray(Route.GET_BEST_ACHIEVEMENTS, new JSONArray().put(gamer.getInt("userId")).put(3));
 				
 				// Don't judge
@@ -173,7 +189,7 @@ public class Profile extends Command<CodinBot> {
 					    puzzle.stream()
 					    	  .map(j->j.getString("level")+": **"+j.getString("title")+"**:\n"+j.getString("description"))
 					    	  .collect(Collectors.joining("\n"))
-					    ,false);
+					    ,false);*/
 				(users!=null&&users.size()>1?channel.sendMessage("Warning: "+users.size()+" users share a similar username. Showing the one with matching capitalization/first in the list").embed(eb.build()):channel.sendMessage(eb.build())).queue();
 			}
 			catch(Exception e) {

@@ -30,10 +30,11 @@ public class Puzzle {
 	
 	private long imageID = -1, id = -1, attempts = -1, solves = -1, participants = -1;
 	
-	private boolean expanded, community;
+	private boolean community;
+	protected boolean expanded;
 	
 	public Puzzle(JSONObject json) {
-		this.type = PuzzleType.of(json.getString("level"));
+		this.type = PuzzleType.of(json.optString("level", null));
 		this.expanded = false;
 		this.difficulty = type == PuzzleType.SOLO ? Difficulty.valueOf(json.getString("level").toUpperCase()) : null;
 		
@@ -47,6 +48,7 @@ public class Puzzle {
 		case SOLO: url+="training/"+difficulty.name().toLowerCase()+"/"+prettyId;break;
 		case MULTIPLAYER: url+="multiplayer/bot-programming/"+prettyId;break;
 		case OPTIMIZATION: url+="multiplayer/optimization/"+prettyId;break;
+		case CONTEST: url+="contests/"+prettyId;break;
 		default: url+="404";
 		}
 	}
