@@ -174,7 +174,7 @@ public class Profile extends Command<CodinBot> {
 					    	  .map(j->j.getString("level")+": **"+j.getString("title")+"**:\n"+j.getString("description"))
 					    	  .collect(Collectors.joining("\n"))
 					    ,false);
-				(users!=null&&users.size()>1?channel.sendMessage("Warning: "+users.size()+" users share a similar username. Showing the one with mathcing capitalization/first in the list").embed(eb.build()):channel.sendMessage(eb.build())).queue();
+				(users!=null&&users.size()>1?channel.sendMessage("Warning: "+users.size()+" users share a similar username. Showing the one with matching capitalization/first in the list").embed(eb.build()):channel.sendMessage(eb.build())).queue();
 			}
 			catch(Exception e) {
 				e.printStackTrace();
