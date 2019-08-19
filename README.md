@@ -8,13 +8,15 @@ CodinGame does not have an official API, nor is their unofficial API documented,
 
 Commands:
 profile,
-puzzle
+puzzle, contest
 
 The prefix is a mention
 
 Download jarfile and view run instructions via the releases page.
 
 You can test the bot [here](https://discord.gg/Xa94RwU)
+
+Invite: https://discordapp.com/api/oauth2/authorize?client_id=494490722272149519&permissions=19456&scope=bot
 
 Known bugs:
 - user lookup by handle is broken
