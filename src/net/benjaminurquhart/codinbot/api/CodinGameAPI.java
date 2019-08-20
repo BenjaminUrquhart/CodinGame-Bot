@@ -24,8 +24,11 @@ public class CodinGameAPI {
 	public static final String BASE_PATH = "https://www.codingame.com/services/";
 	
 	public static final OkHttpClient CLIENT = new OkHttpClient();
+	public static final CodinGameAPI API = new CodinGameAPI();
 	
-	public static List<CodinGamer> getUsersByName(String name) {
+	private CodinGameAPI() {}
+	
+	public List<CodinGamer> getUsersByName(String name) {
 		try {
 			JSONArray response = getJSONArray(Route.SEARCH, new JSONArray().put(name).put("en"));
 			return response.toList().stream()
@@ -38,7 +41,7 @@ public class CodinGameAPI {
 			throw new APIException(e);
 		}
 	}
-	public static CodinGamer getUserByhandle(String handle) {
+	public CodinGamer getUserByhandle(String handle) {
 		try {
 			JSONObject json = getJSONObject(Route.GET_POINTS_BY_HANDLE, new JSONArray().put(handle));
 			json = json.getJSONObject("codingamer");
@@ -48,7 +51,7 @@ public class CodinGameAPI {
 			throw new APIException(e);
 		}
 	}
-	public static List<Puzzle> getPuzzlesByName(String name) {
+	public List<Puzzle> getPuzzlesByName(String name) {
 		try {
 			JSONArray response = getJSONArray(Route.SEARCH, new JSONArray().put(name).put("en"));
 			return response.toList().stream()
@@ -61,7 +64,7 @@ public class CodinGameAPI {
 			throw new APIException(e);
 		}
 	}
-	public static Contest getNextContest() {
+	public Contest getNextContest() {
 		try {
 			JSONObject basic = getJSONObject(Route.GET_NEXT_CONTEST_ID, new JSONArray());
 			JSONObject full = getJSONObject(Route.GET_CONTEST_BY_ID, new JSONArray().put(basic.getString("publicId")).put(JSONObject.NULL));
@@ -76,20 +79,20 @@ public class CodinGameAPI {
 			throw new APIException(e);
 		}
 	}
-	public static JSONArray getJSONArray(Route route, JSONArray data) throws IOException {
+	public JSONArray getJSONArray(Route route, JSONArray data) throws IOException {
 		Response response = makeRequest(route, data.toString());
 		String str = response.body().string();
 		//System.err.println(str);
 		return new JSONArray(str);
 	}
-	public static JSONObject getJSONObject(Route route, JSONArray data) throws IOException {
+	public JSONObject getJSONObject(Route route, JSONArray data) throws IOException {
 		Response response = makeRequest(route, data.toString());
 		String str = response.body().string();
 		//System.err.println(str);
 		return new JSONObject(str);
 	}
 	
-	private static Response makeRequest(Route route, String data) throws IOException {
+	private Response makeRequest(Route route, String data) throws IOException {
 		//System.err.println(route.getMethod()+" "+route);
 		//System.err.println(data);
 		Request request = new Request.Builder()

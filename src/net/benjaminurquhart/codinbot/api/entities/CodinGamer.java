@@ -17,7 +17,7 @@ public class CodinGamer {
 		this.name = name;
 		
 		try {
-			profile = new UserProfile(CodinGameAPI.getJSONObject(Route.GET_POINTS_BY_HANDLE, new JSONArray().put(handle)));
+			profile = new UserProfile(CodinGameAPI.API.getJSONObject(Route.GET_POINTS_BY_HANDLE, new JSONArray().put(handle)));
 		}
 		catch(Exception e) {
 			e.printStackTrace();

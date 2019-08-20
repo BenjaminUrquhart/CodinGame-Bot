@@ -16,7 +16,7 @@ public class CodinBot {
 	
 	static {
 		try {
-			token = new String(Files.readAllBytes(new File("token.txt").toPath()));
+			token = new String(Files.readAllBytes(new File("token.txt").toPath())).trim();
 		}
 		catch(Exception e) {
 			e.printStackTrace();

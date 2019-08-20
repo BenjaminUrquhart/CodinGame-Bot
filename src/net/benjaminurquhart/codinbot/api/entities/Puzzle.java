@@ -65,7 +65,7 @@ public class Puzzle {
 	public long getID() {
 		return id;
 	}
-	public String getPrettyid() {
+	public String getPrettyId() {
 		return prettyId;
 	}
 	public String getName() {
@@ -117,7 +117,7 @@ public class Puzzle {
 			return;
 		}
 		try {
-			JSONObject json = CodinGameAPI.getJSONObject(Route.GET_PUZZLE_INFO_BY_ID, new JSONArray().put(this.prettyId).put(JSONObject.NULL));
+			JSONObject json = CodinGameAPI.API.getJSONObject(Route.GET_PUZZLE_INFO_BY_ID, new JSONArray().put(this.prettyId).put(JSONObject.NULL));
 			this.id = json.getLong("id");
 			this.solves = json.getLong("solvedCount");
 			this.attempts = json.getLong("attemptCount");
@@ -164,6 +164,6 @@ public class Puzzle {
 		expanded = true;
 	}
 	public String toString() {
-		return String.format("%s (Type: %s, Difficulty: %s)", name, type, difficulty == null ? "N/A" : difficulty);
+		return String.format("Puzzle: %s (ID: %s, Type: %s, Difficulty: %s)", name, prettyId, type, difficulty == null ? "N/A" : difficulty);
 	}
 }

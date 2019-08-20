@@ -38,7 +38,7 @@ public class Profile extends Command<CodinBot> {
 				List<CodinGamer> users = null;
 				CodinGamer user = null;
 				try {
-					users = CodinGameAPI.getUsersByName(args[2]);
+					users = CodinGameAPI.API.getUsersByName(args[2]);
 					if(users.size()>1) {
 						for(CodinGamer cg : users) {
 							if(cg.getName().equals(args[2])) {
@@ -62,7 +62,7 @@ public class Profile extends Command<CodinBot> {
 				}
 				catch(Exception e) {
 					try {
-						user = CodinGameAPI.getUserByhandle(args[2]);
+						user = CodinGameAPI.API.getUserByhandle(args[2]);
 					}
 					catch(Exception exec) {
 						exec.printStackTrace();

@@ -54,7 +54,7 @@ public class GetPuzzle extends Command<CodinBot> {
 		final boolean all = event.getMessage().getContentRaw().toLowerCase().contains("--full");
 		channel.sendTyping().queue($ -> {
 			try {
-				List<Puzzle> puzzles = CodinGameAPI.getPuzzlesByName(args[2]);
+				List<Puzzle> puzzles = CodinGameAPI.API.getPuzzlesByName(args[2]);
 				if(puzzles.isEmpty()) {
 					channel.sendMessage("No puzzles by that name were found. Please try again.").queue();
 					return;

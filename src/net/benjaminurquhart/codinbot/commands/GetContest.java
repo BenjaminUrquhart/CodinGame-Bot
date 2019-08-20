@@ -24,7 +24,7 @@ public class GetContest extends Command<CodinBot> {
 		
 		channel.sendTyping().queue($ -> {
 			try {
-				Contest contest = CodinGameAPI.getNextContest();
+				Contest contest = CodinGameAPI.API.getNextContest();
 				EmbedBuilder eb = new EmbedBuilder();
 				eb.setColor(ImageUtil.getAverageColor(ImageIO.read(new URL(contest.getCoverUrl()))));
 				eb.setImage(contest.getCoverUrl());

@@ -43,6 +43,10 @@ public class Contest extends Puzzle {
 	}
 	
 	@Override
+	public String toString() {
+		return String.format("Contest: %s (ID: %s, Info: %s, Start: %s, End: %s)", this.getName(), this.getPrettyId(), this.getInfo(), this.getStartTime(), this.getEndTime());
+	}
+	@Override
 	public void expand() {
 		throw new UnsupportedOperationException("Contests cannot be expanded");
 	}
