@@ -9,10 +9,9 @@ import java.util.stream.Collectors;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import net.benjaminurquhart.codinbot.api.entities.CodinGamer;
-import net.benjaminurquhart.codinbot.api.entities.Contest;
-import net.benjaminurquhart.codinbot.api.entities.Puzzle;
+import net.benjaminurquhart.codinbot.api.entities.*;
 import net.benjaminurquhart.codinbot.api.enums.Route;
+
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -74,6 +73,19 @@ public class CodinGameAPI {
 			full.put("name", full.getString("title"));
 			full.put("level", full.getString("type"));
 			return new Contest(full);
+		}
+		catch(Exception e) {
+			throw new APIException(e);
+		}
+	}
+	public List<Clash> getPendingClashes() {
+		try {
+			JSONArray array = getJSONArray(Route.GET_PENDING_CLASHES, new JSONArray());
+			return array.toList().stream()
+								 .map(Map.class::cast)
+								 .map(JSONObject::new)
+								 .map(Clash::new)
+								 .collect(Collectors.toList());
 		}
 		catch(Exception e) {
 			throw new APIException(e);

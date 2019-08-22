@@ -19,6 +19,7 @@ public class Puzzle {
 
 	private PuzzleType type;
 	private Difficulty difficulty;
+	private Leaderboard leaderboard;
 	
 	private String url;
 	private String name;
@@ -82,6 +83,28 @@ public class Puzzle {
 	}
 	public String getBackground() {
 		return background;
+	}
+	public Leaderboard getLeaderboard() {
+		if(leaderboard == null) {
+			try {
+				JSONArray json = new JSONArray();
+				JSONObject options = new JSONObject();
+				
+				options.put("active", false);
+				options.put("filter", "");
+				options.put("column", "");
+				
+				json.put(this.getPrettyId());
+				json.put(JSONObject.NULL);
+				json.put("global");
+				json.put(options);
+				leaderboard = new Leaderboard(this, CodinGameAPI.API.getJSONObject(Route.GET_LEADERBOARD_BY_PUZZLE_ID, json));
+			}
+			catch(Exception e) {
+				throw new APIException(e);
+			}
+		}
+		return leaderboard;
 	}
 	public boolean isCommunity() {
 		return community;

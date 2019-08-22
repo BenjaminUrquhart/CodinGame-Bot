@@ -42,5 +42,8 @@ public class GetContest extends Command<CodinBot> {
 			}
 		});
 	}
-
+	@Override
+	public String getDescription() {
+		return "retrives the upcoming contest";
+	}
 }

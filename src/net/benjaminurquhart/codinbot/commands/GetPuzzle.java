@@ -144,7 +144,11 @@ public class GetPuzzle extends Command<CodinBot> {
 						eb.addField("Puzzle stats:", String.format("Started: %d\nSolved: %d\nCompletion rate: %.0f%%", puzzle.getNumAttempts(), puzzle.getNumSolutions(), puzzle.getNumSolutions()/(double)puzzle.getNumAttempts()*100), true);
 					}
 					if(all && puzzle.getStory() != null) {
-						eb.addField("Story:", puzzle.getStory(), false);
+						String story = puzzle.getStory();
+						if(story.length() > 1024) {
+							story = story.substring(0,1020)+"...";
+						}
+						eb.addField("Story:", story, false);
 					}
 					if(all && puzzle.getBackground() != null) {
 						String background = puzzle.getBackground();
@@ -169,5 +173,9 @@ public class GetPuzzle extends Command<CodinBot> {
 	@Override
 	public String[] getAliases() {
 		return new String[] {"solo","easy","medium","hard","expert","veryhard","golf","codegolf","multi","multiplayer","optim","optimization"};
+	}
+	@Override
+	public String getDescription() {
+		return "retrives info about the given puzzle";
 	}
 }
