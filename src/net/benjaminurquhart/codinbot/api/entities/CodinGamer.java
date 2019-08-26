@@ -1,6 +1,7 @@
 package net.benjaminurquhart.codinbot.api.entities;
 
 import org.json.JSONArray;
+import org.json.JSONObject;
 
 import net.benjaminurquhart.codinbot.api.APIException;
 import net.benjaminurquhart.codinbot.api.CodinGameAPI;
@@ -8,13 +9,17 @@ import net.benjaminurquhart.codinbot.api.enums.Route;
 
 public class CodinGamer {
 
-	private String name,handle,imageID;
+	private String name,handle;
+	private long imageID;
 	
 	private UserProfile profile;
 	
 	
+	public CodinGamer(JSONObject json) {
+		this(json.getString("name"), String.valueOf(json.getLong("id")), String.valueOf(json.getLong("imageBinaryId")));
+	}
 	public CodinGamer(String name, String handle, String imageID) {
-		this.imageID = imageID;
+		this.imageID = Long.parseLong(imageID);
 		this.handle = handle;
 		this.name = name;
 	}
@@ -25,7 +30,7 @@ public class CodinGamer {
 		return handle;
 	}
 	public String getImageUrl() {
-		return "https://static.codingame.com/servlet/fileservlet?id="+imageID;
+		return imageID < 0 ? "https://chat.is-going-to-rickroll.me/i/xLtF1gGPkNOhxw.png" : "https://static.codingame.com/servlet/fileservlet?id="+imageID;
 	}
 	public UserProfile getProfile() {
 		if(profile == null) {

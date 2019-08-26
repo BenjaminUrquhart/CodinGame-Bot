@@ -4,6 +4,8 @@ import net.benjaminurquhart.codinbot.api.CodinGameAPI;
 
 public enum Route {
 
+	LOGIN("Codingamer/loginSiteV2"),
+	
 	NEW_CONTRIB_COUNT("Contribution/getNewContributionCount"),
 	FIND_UNSEEN_NOTIFICATIONS("Notification/findUnseenNotifications"),
 	

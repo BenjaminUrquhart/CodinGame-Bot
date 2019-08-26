@@ -1,6 +1,8 @@
 package net.benjaminurquhart.codinbot.commands;
 
 import java.net.URL;
+import java.time.Instant;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -9,7 +11,7 @@ import javax.imageio.ImageIO;
 
 import net.benjaminurquhart.codinbot.CodinBot;
 import net.benjaminurquhart.codinbot.api.CodinGameAPI;
-import net.benjaminurquhart.codinbot.api.entities.CodinGamer;
+import net.benjaminurquhart.codinbot.api.entities.Contestant;
 import net.benjaminurquhart.codinbot.api.entities.Leaderboard;
 import net.benjaminurquhart.codinbot.api.entities.Puzzle;
 import net.benjaminurquhart.codinbot.util.ImageUtil;
@@ -43,7 +45,8 @@ public class GetLeaderboard extends Command<CodinBot> {
 						break;
 					}
 					catch(Exception e) {
-						System.err.println(p+"\n"+e);
+						System.err.println(p+"\n");
+						e.printStackTrace();
 					}
 				}
 				if(puzzle == null) {
@@ -57,8 +60,14 @@ public class GetLeaderboard extends Command<CodinBot> {
 				}
 				EmbedBuilder eb = new EmbedBuilder();
 				
-				List<CodinGamer> gamers = board.getUsers();
-				Map<String, Integer> langs = board.getLanguages();
+				List<Contestant> gamers = board.getContestants();
+				Map<String, Integer> langs = new HashMap<>();
+				String lang;
+				
+				for(Contestant contestant : gamers) {
+					lang = contestant.getLanguage();
+					langs.put(lang, langs.containsKey(lang) ? langs.get(lang) + 1 : 1);
+				}
 				
 				eb.setAuthor(puzzle.getName(), puzzle.getUrlString());
 				eb.setColor(ImageUtil.getAverageColor(ImageIO.read(new URL(puzzle.getCoverUrl()))));
@@ -66,15 +75,22 @@ public class GetLeaderboard extends Command<CodinBot> {
 				
 				StringBuilder sb = new StringBuilder();
 				String s;
+				
+				Contestant gamer;
 				for(int i = 0; i < Math.min(10, gamers.size()); i++) {
-					s = gamers.get(i).getName();
+					gamer = gamers.get(i);
+					s = gamer.getName();
 					if(s == null) {
 						s = "Anonymous";
 					}
 					sb.append(i);
 					sb.append(": ");
 					sb.append(s);
-					sb.append("\n");
+					sb.append(" (");
+					sb.append(gamer.getLanguage());
+					sb.append(", ");
+					sb.append(gamer.getScore());
+					sb.append(")\n");
 				}
 				eb.addField("Top Users:", sb.toString().trim(), true);
 				
@@ -87,10 +103,12 @@ public class GetLeaderboard extends Command<CodinBot> {
 					s = langsSorted.get(i);
 					sb.append(s);
 					sb.append(": ");
-					sb.append(langs.get(s));
+					sb.append(String.format("%.2f%%", langs.get(s)/(double)gamers.size()*100.0));
 					sb.append("\n");
 				}
-				eb.addField("Top Languages:", sb.toString().trim(), true);
+				eb.addField("Top* Languages:", sb.toString().trim(), true);
+				eb.setFooter("* Top languages are determined by the top "+gamers.size()+" players as of ", "https://chat.is-going-to-rickroll.me/i/0pZHzb238aZqmQ.png");
+				eb.setTimestamp(Instant.now());
 				channel.sendMessage(eb.build()).queue();
 			}
 			catch(Exception e) {

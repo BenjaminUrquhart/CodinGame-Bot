@@ -114,7 +114,7 @@ public class GetProfile extends Command<CodinBot> {
 					eb.setColor(Color.RED);
 				}
 				eb.setThumbnail(user.getImageUrl());
-				eb.setAuthor(args[2],"https://www.codingame.com/profile/"+user.getHandle());
+				eb.setAuthor(user.getName(),"https://www.codingame.com/profile/"+user.getHandle());
 				eb.setDescription(gamer.has("tagline")?gamer.getString("tagline"):"*this user has not set a tagline*");
 				eb.addField("Level", String.valueOf(level), true);
 				eb.addField("Rank", rank+" ("+title+")", true);
