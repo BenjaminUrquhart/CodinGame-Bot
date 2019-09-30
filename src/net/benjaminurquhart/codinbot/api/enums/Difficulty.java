@@ -5,6 +5,7 @@ public enum Difficulty {
 	TUTORIAL("Tutorial"),
 	CODEGOLF("Code Golf"),
 	WORLDCUP("Contest"),
+	BATTLE("Contest"),
 	EASY("Easy"),
 	MEDIUM("Medium"),
 	HARD("Hard"),

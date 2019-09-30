@@ -37,7 +37,16 @@ public class Puzzle {
 	public Puzzle(JSONObject json) {
 		this.type = PuzzleType.of(json.optString("level", null));
 		this.expanded = false;
-		this.difficulty = type == PuzzleType.SOLO ? Difficulty.valueOf(json.getString("level").toUpperCase()) : null;
+		try {
+			this.difficulty = type == PuzzleType.SOLO ? Difficulty.valueOf(json.getString("level").toUpperCase()) : null;
+			if(difficulty == null && type == PuzzleType.CONTEST) {
+				this.difficulty = Difficulty.BATTLE;
+			}
+		}
+		catch(Exception e) {
+			System.err.println("Error resolving Difficulty from "+json.getString("level"));
+			System.err.println("Puzzle type: "+type.name());
+		}
 		
 		this.prettyId = json.getString("id");
 		

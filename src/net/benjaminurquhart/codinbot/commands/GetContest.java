@@ -32,6 +32,7 @@ public class GetContest extends Command<CodinBot> {
 				eb.setDescription(contest.getDescription());
 				eb.addField("Type:", contest.getInfo(), true);
 				eb.addField("Time:", contest.getDateString(), true);
+				eb.addField("Misc. Info:", String.format("Puzzle Type: %s\nDifficulty: %s (%s)", contest.getType(), contest.getDifficulty(), contest.getDifficulty() == null ? "N/A" : contest.getDifficulty().name()), true);
 				eb.setTimestamp(contest.getStartTime());
 				eb.setFooter("Starts on", "https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/120/microsoft/209/calendar_1f4c5.png");
 				channel.sendMessage(eb.build()).queue();
