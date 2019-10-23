@@ -6,12 +6,17 @@ import java.util.EnumSet;
 import java.util.concurrent.TimeUnit;
 
 import org.jivesoftware.smack.AbstractXMPPConnection;
+import org.jivesoftware.smack.SmackConfiguration;
 import org.jivesoftware.smack.tcp.XMPPTCPConnection;
+import org.jivesoftware.smack.tcp.XMPPTCPConnectionConfiguration;
 import org.jivesoftware.smack.util.dns.minidns.MiniDnsResolver;
+import org.jivesoftware.smackx.muc.MultiUserChat;
+import org.jivesoftware.smackx.muc.MultiUserChatManager;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.jxmpp.jid.EntityBareJid;
 import org.jxmpp.jid.impl.JidCreate;
+import org.jxmpp.jid.parts.Resourcepart;
 
 import net.benjaminurquhart.codinbot.api.CodinGameAPI;
 import net.benjaminurquhart.codinbot.api.enums.Route;
@@ -31,9 +36,10 @@ public class CodinBot {
 
 	private static String token;
 	
-	public static final boolean ENABLE_CHAT = false;
+	private AbstractXMPPConnection chatConnection;
+	private MultiUserChat chat;
 	
-	public static AbstractXMPPConnection chatConnection;
+	private static JSONObject config;
 	
 	static {
 		try {
@@ -42,39 +48,7 @@ public class CodinBot {
 				JSONObject json = new JSONObject(new String(Files.readAllBytes(file.toPath())));
 				token = json.getString("token");
 				if(json.has("chat")) {
-					try {
-						JSONObject config = json.getJSONObject("chat");
-						String email = config.getString("email");
-						String password = config.getString("password");
-						String channel = config.optString("channel", "world");
-						
-						JSONArray requestData = new JSONArray().put(email)
-															   .put(password)
-															   .put(true);
-						Request request = new Request.Builder()
-								.url(Route.LOGIN.toString())
-								.addHeader("Content-Type", "application/json")
-								.method(Route.LOGIN.getMethod(), RequestBody.create(MediaType.parse("application/json"), requestData.toString()))
-								.build();
-						
-						Response response = CodinGameAPI.CLIENT.newCall(request).execute();
-						
-						JSONObject info = new JSONObject(response.body().string());
-						JSONObject codingamer = info.getJSONObject("codinGamer");
-						int id = codingamer.getInt("userId");
-						
-						MiniDnsResolver.setup();
-						chatConnection = new XMPPTCPConnection(String.valueOf(id), password, "chat.codingame.com");
-						chatConnection.connect().login();
-						
-						EntityBareJid channelID = (EntityBareJid) JidCreate.bareFrom(channel+"@conference.codingame.com");
-								
-						System.err.printf("Logged into CodinGame chat as %s (%d)\n", codingamer.getString("pseudo"), id);
-						System.err.println("Channel: #"+channel);
-					}
-					catch(Exception e) {
-						e.printStackTrace();
-					}
+					config = json.getJSONObject("chat");
 				}
 			}
 			else {
@@ -87,6 +61,87 @@ public class CodinBot {
 				System.exit(1);
 			}
 		}
+	}
+	public CodinBot() {
+		if(config != null) {
+			try {
+				String email = config.getString("email");
+				String password = config.getString("password");
+				String channel = config.optString("channel", "world");
+				
+				System.out.println("Getting ID for user with email "+email);
+				
+				JSONArray requestData = new JSONArray().put(email)
+													   .put(password)
+													   .put(true);
+				MiniDnsResolver.setup();
+				Request request = new Request.Builder()
+						.url(Route.LOGIN.toString())
+						.addHeader("Content-Type", "application/json")
+						.method(Route.LOGIN.getMethod(), RequestBody.create(MediaType.parse("application/json"), requestData.toString()))
+						.build();
+				
+				Response response = CodinGameAPI.CLIENT.newCall(request).execute();
+				
+				JSONObject info = new JSONObject(response.body().string());
+				JSONObject codingamer = info.getJSONObject("codinGamer");
+				int id = codingamer.getInt("userId");
+				
+				System.out.println("ID: "+id);
+				
+				SmackConfiguration.setDefaultPacketReplyTimeout(15000);
+				XMPPTCPConnectionConfiguration chatConfig = XMPPTCPConnectionConfiguration.builder()
+						.setUsernameAndPassword(String.valueOf(id), password)
+						.setXmppDomain("chat.codingame.com")
+						.setConnectTimeout(15*1000)
+						.build();
+				chatConnection = new XMPPTCPConnection(chatConfig);
+				chatConnection.connect().login();
+				System.out.println("Connected to XMPP server. Joining channel #"+channel+"...");
+				EntityBareJid channelID = (EntityBareJid) JidCreate.bareFrom(channel+"@conference.codingame.com");
+				Resourcepart nick = Resourcepart.from(codingamer.getString("pseudo"));
+				
+				MultiUserChatManager manager = MultiUserChatManager.getInstanceFor(chatConnection);
+				chat = manager.getMultiUserChat(channelID);
+				chat.createOrJoin(nick);
+				while(chat.pollMessage() != null);
+				chat.addMessageListener((message) -> {
+					if(message == null || message.getBody() == null) {
+						System.err.println("Received null message ("+message+")");
+						return;
+					}
+					String from = message.getFrom() == null ? "???" : message.getFrom().getResourceOrEmpty().toString();
+					System.out.println(from+": "+message.getBody());
+				});
+				Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+					try {
+						System.out.println("Shutting down!");
+						if(chatConnection != null) {
+							chat.leaveSync();
+							chatConnection.disconnect();
+						}
+					}
+					catch(Exception e) {
+						e.printStackTrace();
+					}
+				}));
+				System.out.println("Success!");
+				System.out.printf("Logged into CodinGame chat as %s (%d)\n", codingamer.getString("pseudo"), id);
+				System.out.println("Channel: #"+channel);
+			}
+			catch(Exception e) {
+				e.printStackTrace();
+			}
+		}
+		else {
+			System.out.println("Chat disabled");
+		}
+	}
+	public MultiUserChat getChat() {
+		return chat;
+	}
+	public AbstractXMPPConnection getConnection() {
+		return chatConnection;
 	}
 	public static void main(String[] args) throws Exception {
 		JDA jda = new JDABuilder(token.trim()).setEnabledCacheFlags(EnumSet.noneOf(CacheFlag.class)).build().awaitReady();

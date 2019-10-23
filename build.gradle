@@ -33,6 +33,7 @@ dependencies {
 	implementation group: 'org.igniterealtime.smack', name: 'smack-im', version: '4.3.4'
 	implementation group: 'org.igniterealtime.smack', name: 'smack-tcp', version: '4.3.4'
 	implementation group: 'org.igniterealtime.smack', name: 'smack-core', version: '4.3.4'
+	implementation group: 'org.igniterealtime.smack', name: 'smack-java7', version: '4.3.4'
 	implementation group: 'org.igniterealtime.smack', name: 'smack-extensions', version: '4.3.4'
 	implementation group: 'org.igniterealtime.smack', name: 'smack-resolver-minidns', version: '4.3.4'
 }
