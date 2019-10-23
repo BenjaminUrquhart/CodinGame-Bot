@@ -3,8 +3,8 @@ package net.benjaminurquhart.codinbot.commands;
 import net.benjaminurquhart.codinbot.CodinBot;
 import net.benjaminurquhart.codinbot.api.CodinGameAPI;
 import net.benjaminurquhart.jch.Command;
-import net.dv8tion.jda.core.entities.TextChannel;
-import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent;
+import net.dv8tion.jda.api.entities.TextChannel;
+import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
 import java.io.File;
 import java.io.FileOutputStream;

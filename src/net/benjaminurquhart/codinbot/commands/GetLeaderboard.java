@@ -16,9 +16,9 @@ import net.benjaminurquhart.codinbot.api.entities.Leaderboard;
 import net.benjaminurquhart.codinbot.api.entities.Puzzle;
 import net.benjaminurquhart.codinbot.util.ImageUtil;
 import net.benjaminurquhart.jch.Command;
-import net.dv8tion.jda.core.EmbedBuilder;
-import net.dv8tion.jda.core.entities.TextChannel;
-import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent;
+import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.entities.TextChannel;
+import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
 public class GetLeaderboard extends Command<CodinBot> {
 

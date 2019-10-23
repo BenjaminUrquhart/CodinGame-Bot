@@ -19,9 +19,9 @@ import net.benjaminurquhart.codinbot.api.enums.Difficulty;
 import net.benjaminurquhart.codinbot.api.enums.PuzzleType;
 import net.benjaminurquhart.codinbot.util.ImageUtil;
 import net.benjaminurquhart.jch.Command;
-import net.dv8tion.jda.core.EmbedBuilder;
-import net.dv8tion.jda.core.entities.TextChannel;
-import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent;
+import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.entities.TextChannel;
+import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
 public class GetPuzzle extends Command<CodinBot> {
 

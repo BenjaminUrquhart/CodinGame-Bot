@@ -9,9 +9,9 @@ import net.benjaminurquhart.codinbot.api.CodinGameAPI;
 import net.benjaminurquhart.codinbot.api.entities.Contest;
 import net.benjaminurquhart.codinbot.util.ImageUtil;
 import net.benjaminurquhart.jch.Command;
-import net.dv8tion.jda.core.EmbedBuilder;
-import net.dv8tion.jda.core.entities.TextChannel;
-import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent;
+import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.entities.TextChannel;
+import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
 public class GetContest extends Command<CodinBot> {
 

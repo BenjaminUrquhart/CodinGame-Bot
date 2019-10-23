@@ -107,6 +107,7 @@ public class CodinGameAPI {
 	private Response makeRequest(Route route, String data) throws IOException {
 		//System.err.println(route.getMethod()+" "+route);
 		//System.err.println(data);
+		@SuppressWarnings("deprecation")
 		Request request = new Request.Builder()
 				.url(route.toString())
 				.addHeader("Content-Type", "application/json")

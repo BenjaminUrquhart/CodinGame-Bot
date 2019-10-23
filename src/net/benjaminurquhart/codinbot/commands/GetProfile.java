@@ -16,9 +16,9 @@ import net.benjaminurquhart.codinbot.api.entities.CodinGamer;
 import net.benjaminurquhart.codinbot.api.entities.UserProfile;
 //import net.benjaminurquhart.codinbot.api.enums.Route;
 import net.benjaminurquhart.jch.Command;
-import net.dv8tion.jda.core.EmbedBuilder;
-import net.dv8tion.jda.core.entities.TextChannel;
-import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent;
+import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.entities.TextChannel;
+import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
 public class GetProfile extends Command<CodinBot> {
 
