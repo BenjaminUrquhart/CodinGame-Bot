@@ -16,10 +16,10 @@ public class CodinGamer {
 	
 	
 	public CodinGamer(JSONObject json) {
-		this(json.getString("name"), String.valueOf(json.getLong("id")), String.valueOf(json.getLong("imageBinaryId")));
+		this(json.getString("name"), String.valueOf(json.has("id") ? json.get("id") : json.get("handle")), json.optLong("imageBinaryId", -1));
 	}
-	public CodinGamer(String name, String handle, String imageID) {
-		this.imageID = Long.parseLong(imageID);
+	public CodinGamer(String name, String handle, long imageID) {
+		this.imageID = imageID;
 		this.handle = handle;
 		this.name = name;
 	}

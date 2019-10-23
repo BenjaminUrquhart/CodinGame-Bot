@@ -22,6 +22,7 @@ public class LinkChat extends Command<CodinBot> {
 	private File file;
 	
 	private ChatListener listener;
+	private volatile boolean addedListener;
 	
 	public LinkChat() {
 		super("link");
@@ -92,8 +93,9 @@ public class LinkChat extends Command<CodinBot> {
 	@Override
 	public String[] getAliases() {
 		MultiUserChat chat = this.getHandler().getSelf().getChat();
-		if(chat != null) {
+		if(chat != null && !addedListener) {
 			chat.addMessageListener(listener);
+			addedListener = true;
 		}
 		return super.getAliases();
 	}

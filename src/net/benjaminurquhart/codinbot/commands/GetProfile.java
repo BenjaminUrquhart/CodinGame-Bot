@@ -39,7 +39,17 @@ public class GetProfile extends Command<CodinBot> {
 				CodinGamer user = null;
 				try {
 					users = CodinGameAPI.API.getUsersByName(args[2]);
-					if(users.size()>1) {
+					if(users.isEmpty()) {
+						try {
+							user = CodinGameAPI.API.getUserByHandle(args[2]);
+						}
+						catch(Exception exec) {
+							exec.printStackTrace();
+							channel.sendMessage("Unknown username/handle").queue();
+							return;
+						}
+					}
+					else if(users.size() > 1) {
 						for(CodinGamer cg : users) {
 							if(cg.getName().equals(args[2])) {
 								user = cg;
@@ -62,7 +72,8 @@ public class GetProfile extends Command<CodinBot> {
 				}
 				catch(Exception e) {
 					try {
-						user = CodinGameAPI.API.getUserByhandle(args[2]);
+						e.printStackTrace();
+						user = CodinGameAPI.API.getUserByHandle(args[2]);
 					}
 					catch(Exception exec) {
 						exec.printStackTrace();

@@ -19,7 +19,7 @@ public class Contest extends Puzzle {
 		JSONObject description = new JSONObject(json.getString("descriptionJson"));
 		
 		this.description = description.getString("challengeDescription");
-		this.dateString = description.getString("challengeDate");
+		this.dateString = description.optString("challengeDate", null);
 		this.info = description.getString("challengeInfo").replaceAll("<[^>]+>", "");
 		
 		this.start = Instant.ofEpochMilli(json.getLong("date"));

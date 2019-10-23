@@ -28,7 +28,7 @@ public class Clash {
 						  .map(user -> new CodinGamer(
 								  (String)user.get("codingamerNickname"), 
 								  (String)user.get("codingamerHandle"), 
-								  String.valueOf(user.get("codingamerAvatarId")))
+								  user.containsKey("codingamerAvatarId") ? Long.parseLong(String.valueOf(user.get("codingamerAvatarId"))) : -1)
 						  ).collect(Collectors.toList());
 	}
 	public long getTimeUntilStartMillis() {

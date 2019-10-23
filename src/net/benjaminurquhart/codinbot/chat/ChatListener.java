@@ -13,6 +13,7 @@ import club.minnced.discord.webhook.WebhookCluster;
 import club.minnced.discord.webhook.send.WebhookMessageBuilder;
 import net.benjaminurquhart.codinbot.api.CodinGameAPI;
 import net.benjaminurquhart.codinbot.api.entities.CodinGamer;
+import net.dv8tion.jda.api.utils.MarkdownSanitizer;
 
 public class ChatListener implements MessageListener {
 	
@@ -71,7 +72,7 @@ public class ChatListener implements MessageListener {
 			}));
 		}
 		builder.setUsername(from);
-		builder.setContent(message.getBody());
+		builder.setContent(MarkdownSanitizer.escape(message.getBody()));
 		cluster.broadcast(builder.build());
 	}
 	

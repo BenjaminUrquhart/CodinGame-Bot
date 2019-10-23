@@ -64,6 +64,10 @@ public class CodinBot {
 	}
 	public CodinBot() {
 		if(config != null) {
+			if(config.has("disabled") && config.getBoolean("disabled")) {
+				System.out.println("Chat manually disabled");
+				return;
+			}
 			try {
 				String email = config.getString("email");
 				String password = config.getString("password");
@@ -134,7 +138,7 @@ public class CodinBot {
 			}
 		}
 		else {
-			System.out.println("Chat disabled");
+			System.out.println("Chat disabled (No config)");
 		}
 	}
 	public MultiUserChat getChat() {

@@ -33,18 +33,26 @@ public class CodinGameAPI {
 			return response.toList().stream()
 									.map(Map.class::cast)
 									.filter(json -> json.get("type").equals("USER"))
-									.map(json -> new CodinGamer((String)json.get("name"),(String)json.get("id"),String.valueOf(json.get("imageBinaryId"))))
+									.map(JSONObject::new)
+									.map(CodinGamer::new)
 									.collect(Collectors.toList());
 		}
 		catch(Exception e) {
 			throw new APIException(e);
 		}
 	}
-	public CodinGamer getUserByhandle(String handle) {
+	public CodinGamer getUserByHandle(String handle) {
 		try {
 			JSONObject json = getJSONObject(Route.GET_POINTS_BY_HANDLE, new JSONArray().put(handle));
+			if(!json.has("codingamer")) {
+				throw new IllegalArgumentException("Invalid handle: "+handle);
+			}
 			json = json.getJSONObject("codingamer");
-			return new CodinGamer((String)json.get("name"),(String)json.get("id"),String.valueOf(json.get("imageBinaryId")));
+			json.put("name", json.getString("pseudo"));
+			json.put("handle", json.getString("publicHandle"));
+			json.put("imageBinaryId", json.optLong("avatar", -1));
+			//System.out.println(json);
+			return new CodinGamer(json);
 		}
 		catch(Exception e) {
 			throw new APIException(e);
@@ -95,12 +103,18 @@ public class CodinGameAPI {
 		Response response = makeRequest(route, data.toString());
 		String str = response.body().string();
 		//System.err.println(str);
+		if(str.equals("null")) {
+			str = "[]";
+		}
 		return new JSONArray(str);
 	}
 	public JSONObject getJSONObject(Route route, JSONArray data) throws IOException {
 		Response response = makeRequest(route, data.toString());
 		String str = response.body().string();
 		//System.err.println(str);
+		if(str.equals("null")) {
+			str = "{}";
+		}
 		return new JSONObject(str);
 	}
 	
