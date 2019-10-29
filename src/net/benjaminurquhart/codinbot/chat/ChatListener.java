@@ -1,12 +1,16 @@
 package net.benjaminurquhart.codinbot.chat;
 
+import java.io.File;
+import java.nio.file.Files;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
 import org.jivesoftware.smack.MessageListener;
 import org.jivesoftware.smack.packet.Message;
+import org.json.JSONArray;
 
 import club.minnced.discord.webhook.WebhookClient;
 import club.minnced.discord.webhook.WebhookCluster;
@@ -22,16 +26,33 @@ public class ChatListener implements MessageListener {
 	private Set<String> webhooks;
 	private WebhookCluster cluster;
 	
+	private int messageCount;
 	
-	public ChatListener(Set<String> webhooks) {
-		this.cluster = new WebhookCluster(webhooks.size());
+	
+	public ChatListener() {
+		this.cluster = new WebhookCluster();
 		this.avatarCache = new HashMap<>();
-		this.webhooks = webhooks;
+		this.webhooks = new HashSet<>();
+		this.messageCount = -20;
+		try {
+			File file = new File("webhooks.json");
+			if(!file.exists()) {
+				Files.write(file.toPath(), "[]".getBytes());
+			}
+			JSONArray json = new JSONArray(new String(Files.readAllBytes(file.toPath())));
+			json.forEach(w -> webhooks.add(String.valueOf(w)));
+		}
+		catch(Exception e) {
+			e.printStackTrace();
+		}
 		webhooks.stream()
 				.map(WebhookClient::withUrl)
 				.forEach(cluster::addWebhooks);
+		Runtime.getRuntime().addShutdownHook(new Thread(() -> cluster.close()));
 	}
-	
+	public Set<String> getWebhooks() {
+		return webhooks;
+	}
 	public boolean addWebhook(String url) {
 		if(webhooks.contains(url)) {
 			return false;
@@ -48,6 +69,9 @@ public class ChatListener implements MessageListener {
 	@Override
 	public void processMessage(Message message) {
 		if(message == null || message.getBody() == null) {
+			return;
+		}
+		if(messageCount++ < 0) {
 			return;
 		}
 		String from = message.getFrom() == null ? "???" : message.getFrom().getResourceOrEmpty().toString();
@@ -75,5 +99,7 @@ public class ChatListener implements MessageListener {
 		builder.setContent(MarkdownSanitizer.escape(message.getBody()));
 		cluster.broadcast(builder.build());
 	}
-	
+	public void closeCluster() {
+		cluster.close();
+	}
 }
