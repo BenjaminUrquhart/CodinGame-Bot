@@ -1,6 +1,8 @@
 package net.benjaminurquhart.codinbot.commands;
 
 import java.net.URL;
+import java.sql.Date;
+import java.text.SimpleDateFormat;
 
 import javax.imageio.ImageIO;
 
@@ -15,6 +17,7 @@ import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
 public class GetContest extends Command<CodinBot> {
 
+	private static final SimpleDateFormat format = new SimpleDateFormat("MMM d, yyyy hh:mm a z");
 	public GetContest() {
 		super("contest");
 	}
@@ -31,7 +34,7 @@ public class GetContest extends Command<CodinBot> {
 				eb.setAuthor(contest.getName(), contest.getUrlString());
 				eb.setDescription(contest.getDescription());
 				eb.addField("Type:", contest.getInfo(), true);
-				eb.addField("Time:", contest.getDateString() == null ? "Unknown" : contest.getDateString(), true);
+				eb.addField("Time:", contest.getDateString() == null ? format.format(Date.from(contest.getStartTime())) : contest.getDateString(), true);
 				eb.addField("Misc. Info:", String.format("Puzzle Type: %s\nDifficulty: %s (%s)", contest.getType(), contest.getDifficulty(), contest.getDifficulty() == null ? "N/A" : contest.getDifficulty().name()), true);
 				eb.setTimestamp(contest.getStartTime());
 				eb.setFooter("Starts", "https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/120/microsoft/209/calendar_1f4c5.png");
