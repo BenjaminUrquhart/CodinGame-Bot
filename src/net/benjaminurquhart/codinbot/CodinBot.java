@@ -8,6 +8,7 @@ import java.util.concurrent.TimeUnit;
 import org.json.JSONObject;
 
 import net.benjaminurquhart.codinbot.chat.ChatManager;
+import net.benjaminurquhart.codinbot.chat.ChatRelay;
 import net.benjaminurquhart.jch.CommandHandler;
 
 import net.dv8tion.jda.api.JDA;
@@ -17,11 +18,13 @@ import net.dv8tion.jda.api.utils.cache.CacheFlag;
 
 public class CodinBot {
 
+	private static JDA jda;
 	private static String token;
 	
 	private static JSONObject config;
 	
 	private ChatManager chatManager;
+	private ChatRelay relay;
 	
 	static {
 		try {
@@ -54,24 +57,33 @@ public class CodinBot {
 				return;
 			}
 			chatManager = new ChatManager(config);
+			relay = new ChatRelay(chatManager);
 		}
 		else {
 			System.out.println("Chat disabled (No config)");
 		}
 	}
-	
+	public static JDA getJDA() {
+		return jda;
+	}
 	public ChatManager getChatManager() {
 		return chatManager;
 	}
+	public ChatRelay getChatRelay() {
+		return relay;
+	}
 	public static void main(String[] args) throws Exception {
-		JDA jda = new JDABuilder(token.trim()).setEnabledCacheFlags(EnumSet.noneOf(CacheFlag.class)).build().awaitReady();
+		jda = JDABuilder.createDefault(token.trim()).setEnabledCacheFlags(EnumSet.noneOf(CacheFlag.class)).build();
 		CommandHandler<CodinBot> handler = new CommandHandler<>(
 				INSTANCE,
-				jda.getSelfUser().getAsMention()+" ",
+				null,
 				"273216249021071360",
 				"net.benjaminurquhart.codinbot.commands"
 		);
 		handler.setRatelimit(1, TimeUnit.SECONDS);
 		jda.addEventListener(handler);
+		if(INSTANCE.getChatRelay() != null) {
+			jda.addEventListener(INSTANCE.getChatRelay());
+		}
 	}
 }

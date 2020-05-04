@@ -29,7 +29,7 @@ public class CodinGameAPI {
 	
 	public List<CodinGamer> getUsersByName(String name) {
 		try {
-			JSONArray response = getJSONArray(Route.SEARCH, new JSONArray().put(name).put("en"));
+			JSONArray response = getJSONArray(Route.SEARCH, new JSONArray().put(name).put("en").put(JSONObject.NULL));
 			return response.toList().stream()
 									.map(Map.class::cast)
 									.filter(json -> json.get("type").equals("USER"))
@@ -60,7 +60,7 @@ public class CodinGameAPI {
 	}
 	public List<Puzzle> getPuzzlesByName(String name) {
 		try {
-			JSONArray response = getJSONArray(Route.SEARCH, new JSONArray().put(name).put("en"));
+			JSONArray response = getJSONArray(Route.SEARCH, new JSONArray().put(name).put("en").put(JSONObject.NULL));
 			return response.toList().stream()
 									.map(Map.class::cast)
 									.filter(json -> json.get("type").equals("PUZZLE"))
@@ -102,7 +102,7 @@ public class CodinGameAPI {
 	public JSONArray getJSONArray(Route route, JSONArray data) throws IOException {
 		Response response = makeRequest(route, data.toString());
 		String str = response.body().string();
-		//System.err.println(str);
+		System.err.println(str);
 		if(str.equals("null")) {
 			str = "[]";
 		}
@@ -111,7 +111,7 @@ public class CodinGameAPI {
 	public JSONObject getJSONObject(Route route, JSONArray data) throws IOException {
 		Response response = makeRequest(route, data.toString());
 		String str = response.body().string();
-		//System.err.println(str);
+		System.err.println(str);
 		if(str.equals("null")) {
 			str = "{}";
 		}
@@ -125,7 +125,7 @@ public class CodinGameAPI {
 		Request request = new Request.Builder()
 				.url(route.toString())
 				.addHeader("Content-Type", "application/json")
-				.method(route.getMethod(),RequestBody.create(MediaType.parse("application/json"), data))
+				.method(route.getMethod(), RequestBody.create(MediaType.parse("application/json"), data))
 				.build();
 		
 		Response response = CLIENT.newCall(request).execute();

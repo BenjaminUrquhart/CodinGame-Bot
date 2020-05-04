@@ -67,7 +67,7 @@ public class ChatManager {
 					.setXmppDomain("chat.codingame.com")
 					.setConnectTimeout(15*1000)
 					.build();
-			listener = new ChatListener();
+			listener = new ChatListener(this);
 			chatConnection = new XMPPTCPConnection(chatConfig);
 			executor = Executors.newSingleThreadScheduledExecutor();
 			executor.scheduleAtFixedRate(watchdog = new ChatWatchDogThread(this), 0, 1, TimeUnit.MINUTES);

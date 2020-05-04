@@ -10,24 +10,25 @@ import net.benjaminurquhart.codinbot.CodinBot;
 import net.benjaminurquhart.codinbot.chat.ChatListener;
 import net.benjaminurquhart.codinbot.chat.ChatManager;
 import net.benjaminurquhart.jch.Command;
-
-import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.api.Permission;
-import net.dv8tion.jda.api.entities.*;
+import net.dv8tion.jda.api.entities.Member;
+import net.dv8tion.jda.api.entities.TextChannel;
+import net.dv8tion.jda.api.entities.Webhook;
+import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
-public class LinkChat extends Command<CodinBot> {
+public class UnlinkChat extends Command<CodinBot> {
 	
+	private ChatListener listener;
 	private Set<String> webhooks;
 	private File file;
 	
-	private ChatListener listener;
-	
-	public LinkChat() {
-		super("link");
+	public UnlinkChat() {
+		super("unlink");
 		listener = CodinBot.INSTANCE.getChatManager().getListener();
 		webhooks = listener.getWebhooks();
 		file = new File("webhooks.json");
 	}
+
 	@Override
 	public void handle(GuildMessageReceivedEvent event, CodinBot self) {
 		TextChannel channel = event.getChannel();
@@ -56,36 +57,21 @@ public class LinkChat extends Command<CodinBot> {
 				}
 			}
 			if(hook == null) {
-				channel.createWebhook(manager.getChat().getRoom().toString()).queue(wh -> {
-					try {
-						this.listener.addWebhook(wh.getUrl());
-						self.getChatRelay().addChannel(channel.getId());
-						Files.write(file.toPath(), new JSONArray(this.webhooks).toString().getBytes());
-						channel.sendMessage("Linked!").queue();
-					}
-					catch(Exception e) {
-						channel.sendMessage("Failed to save webhook URL! You will need to relink this channel after a restart.\n"+e.toString()).queue();
-					}
-				});
+				channel.sendMessage("This channel is not linked").queue();
 				return;
 			}
-			else if(!this.listener.addWebhook(hook.getUrl())) {
-				if(self.getChatRelay().addChannel(channel.getId())) {
-					channel.sendMessage("Completed channel setup. You may now speak in this channel to send messages to CodinGame chat").queue();
-				}
-				else {
-					channel.sendMessage("This channel is already linked!").queue();
-				}
-				return;
-			}
+			this.listener.removeWebhook(hook.getUrl());
+			self.getChatRelay().removeChannel(channel.getId());
+			hook.delete().queue();
 			try {
-				self.getChatRelay().addChannel(channel.getId());
 				Files.write(file.toPath(), new JSONArray(this.webhooks).toString().getBytes());
-				channel.sendMessage("Linked!").queue();
+				channel.sendMessage("Unlinked!").queue();
 			}
 			catch(Exception e) {
-				channel.sendMessage("Failed to save webhook URL! You will need to relink this channel after a restart.\n"+e.toString()).queue();
+				e.printStackTrace();
+				channel.sendMessage("Failed to save changes").queue();
 			}
 		});
 	}
+
 }

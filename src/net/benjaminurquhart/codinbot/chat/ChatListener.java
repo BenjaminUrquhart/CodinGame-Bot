@@ -23,16 +23,18 @@ public class ChatListener implements MessageListener {
 	
 	private Map<String, String> avatarCache;
 	
-	private Set<String> webhooks;
 	private WebhookCluster cluster;
+	private Set<String> webhooks;
+	private ChatManager manager;
 	
 	private int messageCount;
 	
 	
-	public ChatListener() {
+	public ChatListener(ChatManager manager) {
 		this.cluster = new WebhookCluster();
 		this.avatarCache = new HashMap<>();
 		this.webhooks = new HashSet<>();
+		this.manager = manager;
 		this.messageCount = -20;
 		try {
 			File file = new File("webhooks.json");
@@ -50,8 +52,14 @@ public class ChatListener implements MessageListener {
 				.forEach(cluster::addWebhooks);
 		Runtime.getRuntime().addShutdownHook(new Thread(() -> cluster.close()));
 	}
+	public ChatManager getChatManager() {
+		return manager;
+	}
 	public Set<String> getWebhooks() {
 		return webhooks;
+	}
+	public WebhookCluster getCluster() {
+		return cluster;
 	}
 	public boolean addWebhook(String url) {
 		if(webhooks.contains(url)) {
@@ -78,6 +86,10 @@ public class ChatListener implements MessageListener {
 		if(from.isEmpty()) {
 			from = "???";
 		}
+		/*
+		if(from.equals(manager.getChat().getNickname().toString())) {
+			return;
+		}*/
 		WebhookMessageBuilder builder = new WebhookMessageBuilder();
 		if(!from.equals("???")) {
 			builder.setAvatarUrl(avatarCache.computeIfAbsent(from, username -> {
@@ -96,7 +108,7 @@ public class ChatListener implements MessageListener {
 			}));
 		}
 		builder.setUsername(from);
-		builder.setContent(MarkdownSanitizer.escape(message.getBody()));
+		builder.setContent(MarkdownSanitizer.escape(message.getBody()).replace("@everyone", "@\u0435veryone").replace("@here", "@h\u0435re"));
 		cluster.broadcast(builder.build());
 	}
 	public void closeCluster() {
