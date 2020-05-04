@@ -36,7 +36,7 @@ span.var {display: inline-block;padding-left:5px;padding-right:5px;padding-top:1
 ```
 
 Dependencies:
-- JDA 3: https://github.com/DV8FromTheWorld/JDA
+- JDA 4: https://github.com/DV8FromTheWorld/JDA
 - OkHttp 3: https://github.com/square/okhttp
 - Apache Commons Text: http://commons.apache.org/proper/commons-text/download_text.cgi
 - org.json. Not sure this is open source, but it comes with JDA.
