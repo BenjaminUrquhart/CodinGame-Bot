@@ -13,6 +13,7 @@ import net.benjaminurquhart.jch.CommandHandler;
 
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
+import net.dv8tion.jda.api.requests.GatewayIntent;
 import net.dv8tion.jda.api.utils.cache.CacheFlag;
 
 
@@ -73,7 +74,7 @@ public class CodinBot {
 		return relay;
 	}
 	public static void main(String[] args) throws Exception {
-		jda = JDABuilder.createDefault(token.trim()).setEnabledCacheFlags(EnumSet.noneOf(CacheFlag.class)).build();
+		jda = JDABuilder.createDefault(token.trim()).setEnabledCacheFlags(EnumSet.noneOf(CacheFlag.class)).setEnabledIntents(GatewayIntent.getIntents(GatewayIntent.ALL_INTENTS)).build();
 		CommandHandler<CodinBot> handler = new CommandHandler<>(
 				INSTANCE,
 				null,

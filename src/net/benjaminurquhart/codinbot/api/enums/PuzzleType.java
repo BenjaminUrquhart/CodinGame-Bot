@@ -9,10 +9,12 @@ public enum PuzzleType {
 	
 	public static PuzzleType of(String s) {
 		switch(s) {
-		case "BATTLE":return CONTEST;
-		case "multi":return MULTIPLAYER;
-		case "optim":return OPTIMIZATION;
+		case "WORLDCUP": 
+		case "BATTLE":   return CONTEST;
+		case "multi":    return MULTIPLAYER;
+		case "optim":    return OPTIMIZATION;
 		}
+		System.err.println("Unknown type: " + s);
 		return s == null ? CONTEST : SOLO;
 	}
 }
