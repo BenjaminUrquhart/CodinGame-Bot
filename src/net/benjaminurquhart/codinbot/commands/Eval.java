@@ -53,6 +53,7 @@ public class Eval extends Command<CodinBot> {
 				}
 			}
 			catch(Exception e){
+				e.printStackTrace();
 				channel.sendMessage(e.toString()).queue();
 			}
 		}

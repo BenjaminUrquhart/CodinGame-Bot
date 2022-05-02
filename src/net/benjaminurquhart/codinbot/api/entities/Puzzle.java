@@ -16,6 +16,8 @@ import net.benjaminurquhart.codinbot.api.enums.PuzzleType;
 import net.benjaminurquhart.codinbot.api.enums.Route;
 
 public class Puzzle {
+	
+	protected Route leaderboardRoute = Route.GET_LEADERBOARD_BY_PUZZLE_ID;
 
 	private PuzzleType type;
 	private Difficulty difficulty;
@@ -107,7 +109,7 @@ public class Puzzle {
 				json.put(JSONObject.NULL);
 				json.put("global");
 				json.put(options);
-				leaderboard = new Leaderboard(this, CodinGameAPI.API.getJSONObject(Route.GET_LEADERBOARD_BY_PUZZLE_ID, json));
+				leaderboard = new Leaderboard(this, CodinGameAPI.API.getJSONObject(leaderboardRoute, json));
 			}
 			catch(Exception e) {
 				throw new APIException(e);

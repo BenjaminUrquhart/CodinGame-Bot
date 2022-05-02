@@ -74,7 +74,11 @@ public class CodinGameAPI {
 	public Contest getNextContest() {
 		try {
 			JSONObject basic = getJSONObject(Route.GET_NEXT_CONTEST_ID, new JSONArray());
-			JSONObject full = getJSONObject(Route.GET_CONTEST_BY_ID, new JSONArray().put(basic.getString("publicId")).put(JSONObject.NULL));
+			if(!basic.has("publicId")) {
+				return null;
+			}
+			JSONObject full = getJSONObject(Route.GET_CONTEST_BY_ID, new JSONArray().put(basic.getString("publicId")));
+			//System.out.println(full);
 			full = full.getJSONObject("challenge");
 			full.put("imageBinaryId", full.optLong("cover1Id", basic.optLong("coverId", -1)));
 			full.put("id", basic.getString("publicId"));
@@ -119,8 +123,8 @@ public class CodinGameAPI {
 	}
 	
 	private Response makeRequest(Route route, String data) throws IOException {
-		//System.err.println(route.getMethod()+" "+route);
-		//System.err.println(data);
+		System.err.println(route.getMethod()+" "+route);
+		System.err.println(data);
 		@SuppressWarnings("deprecation")
 		Request request = new Request.Builder()
 				.url(route.toString())

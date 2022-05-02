@@ -8,5 +8,8 @@ public enum League {
 	BRONZE,
 	WOOD,
 	WOOD2,
-	WOOD3;
+	WOOD3,
+	WOOD4,
+	WOOD5,
+	WOOD6,
 }

@@ -4,6 +4,8 @@ import java.time.Instant;
 
 import org.json.JSONObject;
 
+import net.benjaminurquhart.codinbot.api.enums.Route;
+
 public class Contest extends Puzzle {
 
 	private Instant start, end;
@@ -15,6 +17,7 @@ public class Contest extends Puzzle {
 	public Contest(JSONObject json) {
 		super(json);
 		super.expanded = true;
+		super.leaderboardRoute = Route.GET_LEADERBOARD_BY_CONTEST_ID;
 		
 		JSONObject description = new JSONObject(json.getString("descriptionJson"));
 		

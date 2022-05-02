@@ -74,7 +74,7 @@ public class CodinBot {
 		return relay;
 	}
 	public static void main(String[] args) throws Exception {
-		jda = JDABuilder.createDefault(token.trim()).setEnabledCacheFlags(EnumSet.noneOf(CacheFlag.class)).setEnabledIntents(GatewayIntent.getIntents(GatewayIntent.ALL_INTENTS)).build();
+		jda = JDABuilder.createDefault(token.trim()).enableCache(EnumSet.allOf(CacheFlag.class)).setEnabledIntents(GatewayIntent.getIntents(GatewayIntent.ALL_INTENTS)).build();
 		CommandHandler<CodinBot> handler = new CommandHandler<>(
 				INSTANCE,
 				null,

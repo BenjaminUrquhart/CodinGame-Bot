@@ -47,7 +47,9 @@ public class ChatManager {
 			
 			JSONArray requestData = new JSONArray().put(email)
 												   .put(password)
-												   .put(true);
+												   .put(true)
+												   .put("CODINGAME")
+												   .put(JSONObject.NULL);
 			MiniDnsResolver.setup();
 			Request request = new Request.Builder()
 					.url(Route.LOGIN.toString())
@@ -58,6 +60,7 @@ public class ChatManager {
 			Response response = CodinGameAPI.CLIENT.newCall(request).execute();
 			
 			JSONObject info = new JSONObject(response.body().string());
+			System.err.println(info);
 			codingamer = info.getJSONObject("codinGamer");
 			id = codingamer.getInt("userId");
 			System.out.println("ID: "+id);

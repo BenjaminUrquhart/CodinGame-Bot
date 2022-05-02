@@ -21,7 +21,7 @@ public class Contestant extends CodinGamer {
 		
 		JSONObject league = json.getJSONObject("league");
 		
-		this.league = League.values()[league.getInt("divisionIndex")];
+		this.league = League.values()[league.getInt("divisionCount")-league.getInt("divisionIndex")-1];
 		
 		this.rank = json.getLong("rank");
 		this.agentId = json.getLong("agentId");

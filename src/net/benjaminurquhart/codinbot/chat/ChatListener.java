@@ -62,6 +62,7 @@ public class ChatListener implements MessageListener {
 		return cluster;
 	}
 	public boolean addWebhook(String url) {
+		System.err.println(url);
 		if(webhooks.contains(url)) {
 			return false;
 		}

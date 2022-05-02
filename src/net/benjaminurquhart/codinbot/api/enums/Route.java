@@ -4,12 +4,12 @@ import net.benjaminurquhart.codinbot.api.CodinGameAPI;
 
 public enum Route {
 
-	LOGIN("Codingamer/loginSiteV2"),
+	LOGIN("Codingamer/loginSite"),
 	
 	NEW_CONTRIB_COUNT("Contribution/getNewContributionCount"),
 	FIND_UNSEEN_NOTIFICATIONS("Notification/findUnseenNotifications"),
 	
-	GET_LEADERBOARD_BY_PUZZLE_ID("/Leaderboards/getFilteredPuzzleLeaderboard"),
+	GET_LEADERBOARD_BY_PUZZLE_ID("Leaderboards/getFilteredPuzzleLeaderboard"),
 	GET_PUZZLE_INFO_BY_ID("Puzzle/findProgressByPrettyId"),
 	
 	GET_TOTAL_ACHIEVEMENT_PROGRESS("CodinGamer/findTotalAchievementProgress"),
@@ -18,6 +18,7 @@ public enum Route {
 	GET_CLASH_RANKING("Leaderboards/getCodinGamerClashRanking"),
 	GET_PENDING_CLASHES("ClashOfCode/findPendingClashes"),
 	
+	GET_LEADERBOARD_BY_CONTEST_ID("Leaderboards/getFilteredChallengeLeaderboard"),
 	GET_NEXT_CONTEST_ID("Challenge/findNextVisibleChallenge"),
 	GET_CONTEST_BY_ID("Challenge/findWorldCupByPublicId"),
 	

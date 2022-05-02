@@ -31,7 +31,7 @@ public class Leaderboard {
 				  		  	   .filter(j -> j.has("agentId"))
 				  		  	   .map(Contestant::new)
 				  		  	   .collect(Collectors.toList());
-		
+		this.puzzle = puzzle;
 		for(String key : langs.keySet()) {
 			languageMap.put(key, langs.getInt(key));
 		}
@@ -44,5 +44,10 @@ public class Leaderboard {
 	}
 	public Puzzle getPuzzle() {
 		return puzzle;
+	}
+	
+	@Override
+	public String toString() {
+		return String.format("'%s' Leaderboard (%d visible paticipants, %d different languages)", puzzle.getName(), contestants.size(), languageMap.size());
 	}
 }

@@ -53,7 +53,7 @@ public class ChatRelay extends ListenerAdapter {
 	@Override
 	public void onGuildMessageReceived(GuildMessageReceivedEvent event) {
 		User user = event.getAuthor();
-		if(user.isBot() || user.isFake() || event.getMessage().isWebhookMessage()) {
+		if(user.isBot() || event.getMessage().isWebhookMessage()) {
 			return;
 		}
 		if(!channels.contains(event.getChannel().getId())) {

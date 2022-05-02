@@ -29,35 +29,43 @@ public class GetLeaderboard extends Command<CodinBot> {
 	public void handle(GuildMessageReceivedEvent event, CodinBot self) {
 		TextChannel channel = event.getChannel();
 		String[] args = event.getMessage().getContentRaw().split(" ", 3);
-		if(args.length < 3){
-			channel.sendMessage(this.getHelpMenu()).queue();
-			return;
-		}
 		channel.sendTyping().queue($ -> {
 			try {
-				List<Puzzle> puzzles = CodinGameAPI.API.getPuzzlesByName(args[2]);
 				Leaderboard board = null;
 				Puzzle puzzle = null;
-				for(Puzzle p : puzzles) {
-					try {
-						board = p.getLeaderboard();
-						puzzle = p;
-						break;
+				
+				if(args.length < 3) {
+					puzzle = CodinGameAPI.API.getNextContest();
+					if(puzzle == null) {
+						channel.sendMessage("No active contest found.").queue();
+						return;
 					}
-					catch(Exception e) {
-						System.err.println(p+"\n");
-						e.printStackTrace();
+					board = puzzle.getLeaderboard();
+				}
+				else {
+					List<Puzzle> puzzles = CodinGameAPI.API.getPuzzlesByName(args[2]);
+					for(Puzzle p : puzzles) {
+						try {
+							board = p.getLeaderboard();
+							puzzle = p;
+							break;
+						}
+						catch(Exception e) {
+							System.err.println(p+"\n");
+							e.printStackTrace();
+						}
+					}
+					if(puzzle == null) {
+						if(puzzles.isEmpty()) {
+							channel.sendMessage("No puzzles found by that name").queue();
+						}
+						else {
+							channel.sendMessage("All "+puzzles.size()+" puzzles found did not have a leaderboard attached to them").queue();
+						}
+						return;
 					}
 				}
-				if(puzzle == null) {
-					if(puzzles.isEmpty()) {
-						channel.sendMessage("No puzzles found by that name").queue();
-					}
-					else {
-						channel.sendMessage("All "+puzzles.size()+" puzzles found did not have a leaderboard attached to them").queue();
-					}
-					return;
-				}
+
 				EmbedBuilder eb = new EmbedBuilder();
 				
 				List<Contestant> gamers = board.getContestants();
