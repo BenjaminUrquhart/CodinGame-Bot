@@ -26,7 +26,8 @@ public class Clash {
 						  .stream()
 						  .map(Map.class::cast)
 						  .map(user -> new CodinGamer(
-								  (String)user.get("codingamerNickname"), 
+								  (String)user.get("codingamerNickname"),
+								  -1,
 								  (String)user.get("codingamerHandle"), 
 								  user.containsKey("codingamerAvatarId") ? Long.parseLong(String.valueOf(user.get("codingamerAvatarId"))) : -1)
 						  ).collect(Collectors.toList());

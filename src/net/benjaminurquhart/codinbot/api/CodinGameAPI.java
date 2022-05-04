@@ -106,7 +106,7 @@ public class CodinGameAPI {
 	public JSONArray getJSONArray(Route route, JSONArray data) throws IOException {
 		Response response = makeRequest(route, data.toString());
 		String str = response.body().string();
-		System.err.println(str);
+		//System.err.println(str);
 		if(str.equals("null")) {
 			str = "[]";
 		}
@@ -115,7 +115,7 @@ public class CodinGameAPI {
 	public JSONObject getJSONObject(Route route, JSONArray data) throws IOException {
 		Response response = makeRequest(route, data.toString());
 		String str = response.body().string();
-		System.err.println(str);
+		//System.err.println(str);
 		if(str.equals("null")) {
 			str = "{}";
 		}
@@ -123,8 +123,8 @@ public class CodinGameAPI {
 	}
 	
 	private Response makeRequest(Route route, String data) throws IOException {
-		System.err.println(route.getMethod()+" "+route);
-		System.err.println(data);
+		//System.err.println(route.getMethod()+" "+route);
+		//System.err.println(data);
 		@SuppressWarnings("deprecation")
 		Request request = new Request.Builder()
 				.url(route.toString())

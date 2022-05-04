@@ -11,17 +11,22 @@ public class CodinGamer {
 
 	private String name,handle;
 	private long imageID;
+	private int id;
 	
 	private UserProfile profile;
 	
 	
 	public CodinGamer(JSONObject json) {
-		this(json.getString("name"), String.valueOf(json.has("id") ? json.get("id") : json.get("handle")), json.optLong("imageBinaryId", -1));
+		this(json.getString("name"), (json.has("userId") && json.get("userId") instanceof Number) ? json.getInt("userId") : -1, String.valueOf(json.has("handle") ? json.get("handle") : json.get("id")), json.optLong("imageBinaryId", -1));
 	}
-	public CodinGamer(String name, String handle, long imageID) {
+	public CodinGamer(String name, int id, String handle, long imageID) {
 		this.imageID = imageID;
 		this.handle = handle;
 		this.name = name;
+		this.id = id;
+	}
+	public int getID() {
+		return id;
 	}
 	public String getName() {
 		return name;
@@ -30,7 +35,7 @@ public class CodinGamer {
 		return handle;
 	}
 	public String getImageUrl() {
-		return imageID < 0 ? "https://chat.is-going-to-rickroll.me/i/xLtF1gGPkNOhxw.png" : "https://static.codingame.com/servlet/fileservlet?id="+imageID;
+		return imageID < 0 ? null : "https://static.codingame.com/servlet/fileservlet?id="+imageID;
 	}
 	public UserProfile getProfile() {
 		if(profile == null) {

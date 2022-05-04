@@ -5,10 +5,11 @@ import java.security.cert.CertificateExpiredException;
 import org.jivesoftware.smack.AbstractXMPPConnection;
 import org.jivesoftware.smackx.muc.MultiUserChat;
 import org.jivesoftware.smackx.muc.MultiUserChatManager;
-import org.json.JSONObject;
 import org.jxmpp.jid.EntityBareJid;
 import org.jxmpp.jid.impl.JidCreate;
 import org.jxmpp.jid.parts.Resourcepart;
+
+import net.benjaminurquhart.codinbot.api.entities.CodinGamer;
 
 public class ChatWatchDogThread extends Thread {
 	
@@ -26,7 +27,7 @@ public class ChatWatchDogThread extends Thread {
 			return;
 		}
 		AbstractXMPPConnection chatConnection = manager.getConnection();
-		JSONObject codingamer = manager.getUser();
+		CodinGamer codingamer = manager.getUser();
 		MultiUserChat chat = manager.getChat();
 		String channel = manager.getChannel();
 		try {
@@ -35,10 +36,10 @@ public class ChatWatchDogThread extends Thread {
 			}
 			running = true;
 			EntityBareJid channelID = (EntityBareJid) JidCreate.bareFrom(channel+"@conference.codingame.com");
-			Resourcepart nick = Resourcepart.from(codingamer.getString("pseudo"));
+			Resourcepart nick = Resourcepart.from(codingamer.getName());
 			if(!chatConnection.isConnected()) {
 				chatConnection.connect().login();
-				System.out.printf("Logged into CodinGame chat as %s (%d)\n", codingamer.getString("pseudo"), this.manager.getUserID());
+				System.out.printf("Logged into CodinGame chat as %s (%d)\n", codingamer.getName(), this.manager.getUserID());
 				if(chat != null) {
 					chat.leaveSync();
 				}

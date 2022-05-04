@@ -1,5 +1,6 @@
 package net.benjaminurquhart.codinbot.chat;
 
+import java.util.List;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -14,11 +15,8 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import net.benjaminurquhart.codinbot.api.CodinGameAPI;
+import net.benjaminurquhart.codinbot.api.entities.CodinGamer;
 import net.benjaminurquhart.codinbot.api.enums.Route;
-import okhttp3.MediaType;
-import okhttp3.Request;
-import okhttp3.RequestBody;
-import okhttp3.Response;
 
 public class ChatManager {
 
@@ -27,7 +25,7 @@ public class ChatManager {
 	private ChatListener listener;
 	
 	private AbstractXMPPConnection chatConnection;
-	private JSONObject codingamer;
+	private CodinGamer codingamer;
 	private MultiUserChat chat;
 	private String channel;
 	private int id = -1;
@@ -39,30 +37,62 @@ public class ChatManager {
 	@SuppressWarnings("deprecation")
 	public ChatManager(JSONObject config) {
 		try {
-			String email = config.getString("email");
+			JSONObject info = null;
+			JSONArray requestData = null;
 			String password = config.getString("password");
 			channel = config.optString("channel", "world");
 			
-			System.out.println("Getting ID for user with email "+email);
-			
-			JSONArray requestData = new JSONArray().put(email)
-												   .put(password)
-												   .put(true)
-												   .put("CODINGAME")
-												   .put(JSONObject.NULL);
 			MiniDnsResolver.setup();
-			Request request = new Request.Builder()
-					.url(Route.LOGIN.toString())
-					.addHeader("Content-Type", "application/json")
-					.method(Route.LOGIN.getMethod(), RequestBody.create(MediaType.parse("application/json"), requestData.toString()))
-					.build();
 			
-			Response response = CodinGameAPI.CLIENT.newCall(request).execute();
-			
-			JSONObject info = new JSONObject(response.body().string());
-			System.err.println(info);
-			codingamer = info.getJSONObject("codinGamer");
-			id = codingamer.getInt("userId");
+			// Numerical user id isn't supported since I can't
+			// find a way to get user info just based on that.
+			// Next best thing is the handle hash thing.
+			if(config.has("handle")) {
+				String handle = config.getString("handle");
+				System.out.println("Logging in with handle " + handle);
+				codingamer = CodinGameAPI.API.getUserByHandle(handle);
+			}
+			else if(config.has("username")) {
+				String username = config.getString("username");
+				System.out.println("Logging in as user " + username);
+				List<CodinGamer> matches = CodinGameAPI.API.getUsersByName(username);
+				
+				for(CodinGamer gamer : matches) {
+					if(gamer.getName().equals(username)) {
+						codingamer = gamer;
+						break;
+					}
+				}
+				if(codingamer == null) {
+					throw new IllegalStateException("No users matching that name");
+				}
+				else {
+					// Users from search results have minimal information attached to them
+					System.out.println("Getting user id");
+					codingamer = CodinGameAPI.API.getUserByHandle(codingamer.getHandle());
+				}
+			}
+			else {
+				/*
+				 * Ok so, they added a captcha to the login endpoint.
+				 * This means we can't login anymore with just 
+				 * email + password. 
+				 * 
+				 * Still gonna keep this here just in case something changes.
+				 */
+				String email = config.getString("email");
+				System.out.println("Getting ID for user with email "+email);
+				
+				requestData = new JSONArray().put(email)
+											 .put(password)
+											 .put(true)
+											 .put("CODINGAME")
+											 .put(JSONObject.NULL);
+				
+				info = CodinGameAPI.API.getJSONObject(Route.LOGIN, requestData);
+				codingamer = new CodinGamer(info);
+			}
+			id = codingamer.getID();
 			System.out.println("ID: "+id);
 			SmackConfiguration.setDefaultPacketReplyTimeout(15000);
 			XMPPTCPConnectionConfiguration chatConfig = XMPPTCPConnectionConfiguration.builder()
@@ -90,7 +120,7 @@ public class ChatManager {
 	public MultiUserChat getChat() {
 		return chat;
 	}
-	public JSONObject getUser() {
+	public CodinGamer getUser() {
 		return codingamer;
 	}
 	public int getUserID() {
